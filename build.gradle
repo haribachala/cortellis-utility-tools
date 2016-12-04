@@ -1,0 +1,51 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.2.RELEASE") {
+        exclude module: 'spring-boot-starter-logging'
+    }
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+
+
+repositories {
+    maven { url "http://artifactory.thomsonreuterslifesciences.com/artifactory/repo" }
+    mavenCentral()
+}
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+configurations {
+    compile.exclude module: "spring-boot-starter-tomcat"
+  }
+
+dependencies {
+    compile 'org.springframework:spring-beans:4.3.2.RELEASE'
+    compile 'org.springframework:spring-core:4.3.2.RELEASE'
+    compile 'org.springframework:spring-web:4.3.2.RELEASE'
+    compile 'org.springframework:spring-context:4.3.2.RELEASE'
+    compile group: 'org.springframework.integration', name: 'spring-integration-mail', version: '4.3.0.RELEASE'
+    compile 'org.springframework:spring-webmvc:4.1.6.RELEASE'
+    compile group: 'javax.mail', name: 'com.springsource.javax.mail', version: '1.4.5'
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    compile("org.springframework.boot:spring-boot-starter-web:1.4.2.RELEASE")
+    compile("org.springframework.boot:spring-boot-starter-jetty:1.4.2.RELEASE")
+    compile group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.9'
+    compile ('org.apache.activemq:activemq-client:5.11.1'){
+        exclude( group: 'org.slf4j' , module: 'slf4j-api')
+    }
+    testCompile("junit:junit")
+
+}
+
+jar {
+    baseName = 'cortellis-utility-tools'
+    version =  '0.1.0'
+}

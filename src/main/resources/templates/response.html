@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Cortellis Seda Alerts</title>
+    <meta http-equiv="Content-Type" content="application/json; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <script src="js/jquery-1.12.4.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="alert alert-info fade in" align="center">
+<a href="http://localhost:9080/" class="close" data-dismiss="alert" aria-label="home">Home</a>
+    <p th:text=" ${message}  " />
+</div>
+</body>
+</html>
