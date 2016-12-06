@@ -12,13 +12,26 @@ if(env == "" || env ==null){
     document.forms["sedaAlertsForm"]["env"].focus();
     return false;
 }
+ if( env == 'prod-edc' || env =='prod-eagan'){
+         if(sedaPassword.length == "" ){
+             alert("password required to trigger alert's on production environment");
+             document.forms["sedaAlertsForm"]["sedaPassword"].focus();
+            return false;
+         }else if(sedaPassword.length > 0 ){
+            if(sedaPassword != "web"){
+             alert("password not matched !")
+             document.forms["sedaAlertsForm"]["sedaPassword"].focus();
+             return false;
+            }
+         }
+    }
   if (logicalDate == null || logicalDate == "") {
         alert("Logical Date Required!");
         return false;
-    }if(logicalDate.length != 10){
+  }if(logicalDate.length != 10){
         alert("Invalid date, date format should be YYYY-MM-DD");
         return false;
-    }
+  }
   if( env !=null || env != ""){
     if((alertIds == null || alertIds== "") && chkAllAlerts==false){
         alert("Enter alert Id's that to be process");
@@ -37,19 +50,8 @@ if(env == "" || env ==null){
         alert("Enter either alerts Ids or Click on check box to process for all users");
         return false;
     }
- }else if( env == 'prod-edc' || env =='prod-eagan'){
-         if(sedaPassword.length == "" ){
-             alert("password required to trigger alert's on production environment");
-             document.forms["sedaAlertsForm"]["sedaPassword"].focus();
-            return false;
-         }else if(sedaPassword.length > 0 ){
-            if(sedaPassword != "web"){
-             alert("password not matched !")
-             document.forms["sedaAlertsForm"]["sedaPassword"].focus();
-             return false;
-            }
-         }
-    }
+ }
+ alert(env);
     if( (alertIds ==null || alertIds== "") && chkAllAlerts){
      var value = confirm("Are you sure you want to trigger alerts to all users (external+internal)?");
       if(value){

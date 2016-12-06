@@ -30,10 +30,10 @@ import java.util.Properties;
 public class RecordServiceController {
 
     private static final Logger logger = LoggerFactory.getLogger(RecordServiceController.class);
-    RestTemplate restTemplate =null;
-    RecordServiceConstants recordServiceConstants=null;
-    URLGeneratorUtility urlGeneratorUtility =null;
-    Properties rsHostPorts =null;
+    private RestTemplate restTemplate =null;
+    private RecordServiceConstants recordServiceConstants=null;
+    private URLGeneratorUtility urlGeneratorUtility =null;
+    private Properties rsHostPorts =null;
     Properties dataStagingHostNames =null;
 
     @RequestMapping(value="/recordServiceAction", produces={"application/json"})
@@ -51,10 +51,7 @@ public class RecordServiceController {
                 MailUtility mailUtility = new MailUtility();
                 mailUtility.sendMail("haribachala@gmail.com", "hariprasad.bachala@tr.com",  task.toUpperCase()+ " task triggered manually on " + recordServiceEnv + "", task+ " task Processed by :" + systemHostName.getHostName() + "  User :" + System.getProperty("user.name"));
            }
-
             logger.info("Record Service" +task.toUpperCase()+  " Process by :" + systemHostName.getHostName() + "  User :" + System.getProperty("user.name"));
-
-
             recordServiceConstants = new RecordServiceConstants();
             recordServiceConstants.setDataSet(componentName);
             recordServiceConstants.setHost(recordServiceEnv);
@@ -66,7 +63,6 @@ public class RecordServiceController {
                 //Admin port is server port +1
                 int adminPort = Integer.valueOf(recordServiceConstants.getPort());
                 recordServiceConstants.setPort(String.valueOf(adminPort +1));
-
             }
             recordServiceConstants.setRecordExtractPath("/recordextractor/extract/");
             recordServiceConstants.setRecordLoaderPath("/recordserver/loader/load/");
@@ -74,7 +70,6 @@ public class RecordServiceController {
             recordServiceConstants.setRecordHealthPath("/admin/health");
             if(task.equalsIgnoreCase("extract")){
                 recordServiceConstants.setUrlPath(recordServiceConstants.getRecordExtractPath()+recordServiceConstants.getDataSet());
-
             }else if(task.equalsIgnoreCase("load")){
                 recordServiceConstants.setUrlPath(recordServiceConstants.getRecordLoaderPath()+recordServiceConstants.getDataSet() + "/" +recordServiceConstants.getSnapShotTime());
             }else if(task.equalsIgnoreCase("publish")){
@@ -93,11 +88,13 @@ public class RecordServiceController {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
             headers.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
+            HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
             ResponseEntity<String> result = restTemplate.exchange(postRequestURL.toString(), HttpMethod.POST, entity, String.class);
-           // model.addAttribute("message", "HTTP Status Code: " +result.getStatusCode()+ " message: "    + task.toUpperCase() +" request sent to server successfully\n"
-          // + "Response: " +result.getBody());
-            model.addAttribute("message", result.getBody());
+            if(task.equalsIgnoreCase("health")) {
+                model.addAttribute("message", "HTTP Status Code: " + result.getStatusCode() + " Response: " + result.getBody());
+            }else {
+                model.addAttribute("message", "HTTP Status Code: " + result.getStatusCode() + " message: " + task.toUpperCase() + " request sent to server successfully");
+            }
             logger.info("Done!");
         }catch (Exception e){
             logger.error(e.getMessage());
@@ -111,9 +108,9 @@ public class RecordServiceController {
     @RequestMapping("/getRSEnvironments")
     @ResponseBody
     public String getRSEnvironments(HttpServletResponse httpServletResponse, String task) throws  Exception{
-        File rsEnvFile=null ;
+        File rsEnvFile ;
         BufferedReader br =null;
-        StringBuilder rsHostBuilder = null;
+        StringBuilder rsHostBuilder;
         String currentLine;
         try {
             // get ports
@@ -150,7 +147,7 @@ public class RecordServiceController {
 
     }
 
-    public void getRecordServerPorts() throws  Exception{
+    private  void getRecordServerPorts() throws  Exception{
         rsHostPorts = new Properties();
         FileInputStream fileInputStream =null;
         File rsHostPortsFile ;
@@ -171,43 +168,6 @@ public class RecordServiceController {
 
     }
 
-   /* private void loadMWHostNames() throws  Exception{
-        mwHostNames = new Properties();
-        FileInputStream fileInputStream =null;
-        File mwHostNamesPropertiesFile ;
-        try {
-            mwHostNamesPropertiesFile = new File("rs-MW-Envs.txt");
-            fileInputStream =new FileInputStream(mwHostNamesPropertiesFile);
-            mwHostNames.load(fileInputStream);
-        } catch (Exception e) {
-            logger.info("rs Config File Not Found: " + e.getMessage());
-            mwHostNames=null;
-            throw  new FileNotFoundException("rs Config File Not Found: " + e.getMessage());
-        }finally {
-            if(fileInputStream!=null)
-                fileInputStream.close();
-        }
 
-
-    }
-    private void loadDataStagingHostNames() throws  Exception{
-        dataStagingHostNames = new Properties();
-        FileInputStream fileInputStream =null;
-        File dsHostNamesPropertiesFile ;
-        try {
-            dsHostNamesPropertiesFile = new File("rs-data-staging-Envs.txt");
-            fileInputStream =new FileInputStream(dsHostNamesPropertiesFile);
-            dataStagingHostNames.load(fileInputStream);
-        } catch (Exception e) {
-            logger.info("rs Config File Not Found: " + e.getMessage());
-            mwHostNames=null;
-            throw  new FileNotFoundException("rs Config File Not Found: " + e.getMessage());
-        }finally {
-            if(fileInputStream!=null)
-                fileInputStream.close();
-        }
-
-
-    }*/
 }
 

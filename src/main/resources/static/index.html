@@ -33,9 +33,10 @@
             $("#env").load("http://localhost:9080/getAlertSedaEnvironments", function(responseTxt, statusTxt, xhr){
               if(statusTxt == "success")
                   showHideSedaPasswordTxtBox();
-                 console.log(responseTxt);
+                // console.log(responseTxt);
               if(statusTxt == "error")
                 alert("Error while loading environments: " + xhr.status + ": " + xhr.statusText);
+                showHideSedaPasswordTxtBox();
              });
 
          }
@@ -45,9 +46,11 @@
               if(statusTxt == "success")
                  showHidePasswordRSTxtBox();
                  showHideSnapShotTxt();
-                 console.log(responseTxt);
+              //   console.log(responseTxt);
               if(statusTxt == "error")
                 alert("Error while loading RSEnvironments: " + xhr.status + ": " + xhr.statusText);
+                showHidePasswordRSTxtBox();
+                 showHideSnapShotTxt();
              });
 
          }
@@ -134,7 +137,7 @@
             <tr>
                 <td nowrap="true">
                     <label>Environment: </label>&nbsp;</td><td><div class="input-container" id="envDiv">
-                <select name="env" id="env" onchange="showHideSedaPasswordTxtBox();">
+                <select name="env" id="env" onchange="showHideSedaPasswordTxtBox();" required>
                 <!-- <option value="local">Local-Machine</option>
                     <option value="dev-dtc">Dev-DTC</option>
                     <option value="build-dtc">Build-DTC</option>
@@ -181,7 +184,7 @@
           <tr>
               <td nowrap="true"><label>component: </label>&nbsp;</td>
               <td nowrap="true"><div class="input-container" id="componentDiv">
-                  <select name="componentName" id="componentName">
+                  <select name="componentName" id="componentName" required>
                       <option value="Drugv1">Drug</option>
                       <option value="Trialv1">Trial</option>
                       <option value="Companyv1">Company</option>
@@ -192,7 +195,7 @@
           <tr>
               <td nowrap="true"><label>Task: </label>&nbsp;</td>
               <td nowrap="true"><div class="input-container" id="task-container">
-                  <select name="task" id="task" onchange="showHideSnapShotTxt();loadRSEnvironments();">
+                  <select name="task" id="task" onchange="showHideSnapShotTxt();loadRSEnvironments();" required>
                       <option value="extract">Extract</option>
                       <option value="load">Load</option>
                       <option value="publish">Publish</option>
@@ -203,8 +206,8 @@
           <tr>
               <td nowrap="true">
                   <label>Environment: </label>&nbsp;</td><td><div class="input-container" id="env-container-rs">
-              <select name="recordServiceEnv" id="recordServiceEnv" onchange="showHidePasswordRSTxtBox();">
-                      <!--<option value="local">Local-Machine</option>
+              <select name="recordServiceEnv" id="recordServiceEnv" onchange="showHidePasswordRSTxtBox();" required>
+                    <!--  <option value="local">Local-Machine</option>
                       <option value="c427nvzdnganp.int.thomsonreuters.com">Dev-DTC-MW-B-1</option>
                       <option value="c343ravdnganp.int.thomsonreuters.com">Build-DTC-MW-B-1</option>
                       <option value="c898hhwenganp.int.thomsonreuters.com">QA-EAGAN-MW-B-1</option>
@@ -214,22 +217,22 @@
                       <option value="c624mkrlngapr.int.thomsonreuters.com">Prod-EDC-MW-B-1</option>
                       <option value="c447tdxlngapr.int.thomsonreuters.com">Prod-EDC-MW-B-2</option>
                       <option value="c129uwfengapr.int.thomsonreuters.com">Prod-EAGAN-MW-B-1</option>
-                      <option value="c019cjqengapr.int.thomsonreuters.com">Prod-EAGAN-MW-B-2</option> -->
+                      <option value="c019cjqengapr.int.thomsonreuters.com">Prod-EAGAN-MW-B-2</option>-->
               </select></div>
           </td>
           </tr>
           <tr id="snapshotDiv">
               <td nowrap="true"><label for="snapshotTime">snapshot Time:</label>&nbsp;</td>
-              <td><div class="input-container"><div class="tooltip"><input type="text" id="snapshotTime" name="snapshotTime"  style="width:160px;" placeholder="YYYY-MM-DDTHH:MM:SSZ"></div></div></td>
+              <td><div class="input-container"><div class="tooltip"><input type="text" id="snapshotTime" name="snapshotTime"  style="width:160px;" placeholder="YYYY-MM-DDTHH:MM:SSZ"   max="24"  min="22"></div></div></td>
           </tr>
           <tr id="rsPasswordDiv">
               <td nowrap="true"><label for="rsPassword">Password :</label>&nbsp;</td>
-              <td><input type="password" id="rsPassword" name="rsPassword"  style="width:85px;"></td>
+              <td><input type="password" id="rsPassword" name="rsPassword"  style="width:85px;" ></td>
           </tr>
       </table>
       <div style="text-align:center">
           <input class="greenButton" type="submit" id="submitRecordServicesForm" value="Submit" />
-          <input class="greenButton" type="reset" id="clearRecordServicesForm" value="Clear" onclick="javascript:eraseText();"/>
+          <input class="greenButton" type="reset" id="clearRecordServicesForm" value="Clear" />
       </div>
 
   </form>
