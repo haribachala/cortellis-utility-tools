@@ -154,7 +154,7 @@ public class SedaAlertsController {
         StringBuilder stringBuilder = null;
         String currentLine;
         try {
-            envFile = new File("alertsSedaEnvs.txt");
+            envFile = new File("conf/alertsSedaEnvs.txt");
             httpServletResponse.setContentType("text/plain");
             br = new BufferedReader(new FileReader(envFile));
             stringBuilder =new StringBuilder();
@@ -179,7 +179,7 @@ public class SedaAlertsController {
         FileInputStream fileInputStream =null;
         File activeMqPropertiesFile ;
         try {
-            activeMqPropertiesFile = new File("activeMqBrokerConfig.properties");
+            activeMqPropertiesFile = new File("conf/activeMqBrokerConfig.properties");
             fileInputStream =new FileInputStream(activeMqPropertiesFile);
             brokerURLS.load(fileInputStream);
           } catch (Exception e) {

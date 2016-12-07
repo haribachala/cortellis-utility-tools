@@ -117,7 +117,7 @@ public class RecordServiceController {
 
             getRecordServerPorts();
             if(!task.equalsIgnoreCase("extract")) {
-                rsEnvFile = new File("rs-MW-Envs.txt");
+                rsEnvFile = new File("conf/rs-MW-Envs.txt");
                 httpServletResponse.setContentType("text/plain");
                 br = new BufferedReader(new FileReader(rsEnvFile));
                 rsHostBuilder = new StringBuilder();
@@ -126,7 +126,7 @@ public class RecordServiceController {
 
                 }
             }else {
-                rsEnvFile = new File("rs-data-staging-Envs.txt");
+                rsEnvFile = new File("conf/rs-data-staging-Envs.txt");
                 httpServletResponse.setContentType("text/plain");
                 br = new BufferedReader(new FileReader(rsEnvFile));
                 rsHostBuilder = new StringBuilder();
@@ -152,7 +152,7 @@ public class RecordServiceController {
         FileInputStream fileInputStream =null;
         File rsHostPortsFile ;
         try {
-            rsHostPortsFile = new File("recordServerHostPorts.properties");
+            rsHostPortsFile = new File("conf/recordServerHostPorts.properties");
             fileInputStream =new FileInputStream(rsHostPortsFile);
             rsHostPorts.load(fileInputStream);
         } catch (Exception e) {

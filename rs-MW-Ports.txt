@@ -1,4 +1,0 @@
-Drugv1=9180
-Trialv1=9080
-Companyv1=9580
-PatentFamilyv1=9630

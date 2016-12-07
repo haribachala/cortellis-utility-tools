@@ -6,7 +6,7 @@ function validateSedaAlertsForm() {
  var  chkAllAlerts = document.forms["sedaAlertsForm"]["chkAllAlerts"].checked;
  var  sedaPassword = document.forms["sedaAlertsForm"]["sedaPassword"].value;
 
- //alert(env + "" + logicalDate + "" + "" + alertIds + "" + chkAllAlerts + "" +sedaPassword);
+
 if(env == "" || env ==null){
     alert("Please select environment!");
     document.forms["sedaAlertsForm"]["env"].focus();
@@ -51,7 +51,6 @@ if(env == "" || env ==null){
         return false;
     }
  }
- alert(env);
     if( (alertIds ==null || alertIds== "") && chkAllAlerts){
      var value = confirm("Are you sure you want to trigger alerts to all users (external+internal)?");
       if(value){
