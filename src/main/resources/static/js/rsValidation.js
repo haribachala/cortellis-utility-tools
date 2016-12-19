@@ -1,5 +1,4 @@
 function validateRecordServicesForm() {
-
  var  componentName= document.forms["recordServicesForm"]["componentName"].value;
  var  task = document.forms["recordServicesForm"]["task"].value;
  var  recordServiceEnv=  document.forms["recordServicesForm"]["recordServiceEnv"].value;
@@ -30,7 +29,7 @@ function validateRecordServicesForm() {
   }
 
   if( recordServiceEnv.indexOf('prod')>=0 ){
-           if(rsPassword.length <= 0 || rsPassword==null ){
+           if(rsPassword.length <= 0 || rsPassword==null || rsPassword=="" ){
                alert("password required!");
              document.forms["recordServicesForm"]["rsPassword"].focus();
               return false;
@@ -42,7 +41,7 @@ function validateRecordServicesForm() {
               }
            }
       }
-
+      return true;
   }
 
 

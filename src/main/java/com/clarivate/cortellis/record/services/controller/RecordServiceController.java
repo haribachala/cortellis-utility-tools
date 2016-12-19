@@ -7,16 +7,17 @@ import com.clarivate.cortellis.commons.utils.URLGeneratorUtility;
 import com.clarivate.cortellis.record.services.constants.RecordServiceConstants;
 import com.clarivate.cortellis.record.services.exceptions.FileNotFoundException;
 import com.clarivate.cortellis.record.services.exceptions.PathNotFoundException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.File;
@@ -35,21 +36,23 @@ public class RecordServiceController {
     private URLGeneratorUtility urlGeneratorUtility =null;
     private Properties rsHostPorts =null;
     Properties dataStagingHostNames =null;
-
-    @RequestMapping(value="/recordServiceAction", produces={"application/json"})
+    @ResponseBody
+    @RequestMapping(value="/recordServiceAction", produces= MediaType.TEXT_HTML_VALUE)
     public String recordServiceAction(
             @RequestParam String componentName,
             @RequestParam String task,
             @RequestParam String recordServiceEnv,
             @RequestParam(value = "snapshotTime" , required =false) String snapshotTime,
-            Model model
+         HttpServletRequest httpServletRequest, HttpServletResponse response
             ){
-
+        String responseText;
+        ResponseEntity<String> result= null;
+        HttpStatus httpStatusCode;
         try {
             SystemHostName systemHostName = new SystemHostName();
-           if (recordServiceEnv.contains("Prod")) {
+           if (recordServiceEnv.contains("prod")) {
                 MailUtility mailUtility = new MailUtility();
-                mailUtility.sendMail("haribachala@gmail.com", "hariprasad.bachala@tr.com",  task.toUpperCase()+ " task triggered manually on " + recordServiceEnv + "", task+ " task Processed by :" + systemHostName.getHostName() + "  User :" + System.getProperty("user.name"));
+                mailUtility.sendMail("cortellis.utility.tool@gmail.com", "hariprasad.bachala@tr.com","cortellis.utility.tool@gmail.com",  task.toUpperCase()+ " task triggered manually on " + recordServiceEnv + "", task+ " task Processed by :" + systemHostName.getHostName() + "  User :" + System.getProperty("user.name"));
            }
             logger.info("Record Service" +task.toUpperCase()+  " Process by :" + systemHostName.getHostName() + "  User :" + System.getProperty("user.name"));
             recordServiceConstants = new RecordServiceConstants();
@@ -77,32 +80,56 @@ public class RecordServiceController {
             }else if(task.equalsIgnoreCase("health")){
                 recordServiceConstants.setUrlPath(recordServiceConstants.getRecordHealthPath());
             }else {
-                model.addAttribute("exception", "requested task URI path Not Found");
                 throw new PathNotFoundException("requested task URI path Not Found");
             }
-
             urlGeneratorUtility = new URLGeneratorUtility();
             URI postRequestURL =urlGeneratorUtility.buildRequestPostURL(recordServiceConstants);
             restTemplate = new RestTemplate();
-             //HttpStatus status= restTemplate.postForObject(postRequestURL, null, HttpStatus.class);
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-            headers.setContentType(MediaType.APPLICATION_JSON);
+            //headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
-            ResponseEntity<String> result = restTemplate.exchange(postRequestURL.toString(), HttpMethod.POST, entity, String.class);
+            result = restTemplate.exchange(postRequestURL.toString(), HttpMethod.POST, entity, String.class);
+
             if(task.equalsIgnoreCase("health")) {
-                model.addAttribute("message", "HTTP Status Code: " + result.getStatusCode() + " Response: " + result.getBody());
+                 responseText=  result.getBody();
+             //  String[] json = recordServiceEnv.split("},");
+                JSONObject embeddedCassandraHealth=  new JSONObject(responseText).getJSONObject("embeddedCassandraHealth");
+                JSONObject recordServerHealth=  new JSONObject(responseText).getJSONObject("recordServerHealth");
+                String  dataStatus = new JSONObject(responseText).get("status").toString();
+                String  storageType=embeddedCassandraHealth.get("Storage Type:").toString();
+                String  cassandraStatus =embeddedCassandraHealth.get("status").toString();
+                String  latestSnapshot=embeddedCassandraHealth.get("latestSnapshot").toString();
+                String  availableSnapshots=embeddedCassandraHealth.get("availableSnapshots").toString();
+                String  recordCount=embeddedCassandraHealth.get("recordCount").toString();
+                String  activeMq=recordServerHealth.get("ActiveMq").toString();
+                StringBuilder responseBuilder =new StringBuilder();
+                responseBuilder.append(dataStatus).append("#")
+                               .append(storageType).append("#")
+                               .append(cassandraStatus).append("#")
+                               .append(latestSnapshot).append("#")
+                               .append(availableSnapshots) .append("#")
+                               .append(recordCount).append("#")
+                               .append(activeMq);
+                httpStatusCode = result.getStatusCode();
+                if(httpStatusCode.equals(HttpStatus.OK)) response.setStatus(200);
+                response.setStatus(HttpStatus.OK.value());
+                return  responseBuilder.toString();
             }else {
-                model.addAttribute("message", "HTTP Status Code: " + result.getStatusCode() + " message: " + task.toUpperCase() + " request sent to server successfully");
+                response.setStatus(200);
+                responseText=  " Request sent to server successfully";
             }
-            logger.info("Done!");
+             logger.info("Task Completed!");
         }catch (Exception e){
             logger.error(e.getMessage());
-            model.addAttribute("message", "Exception : " + e.getMessage());
-            return "exception";
+             response.setStatus(400);
+             if(null!=e.getMessage()){
+                responseText = e.getMessage();}
+             else{
+                responseText = e.getCause().toString();
+            }
         }
-
-        return "response";
+            return  responseText;
 
     }
     @RequestMapping("/getRSEnvironments")
@@ -114,7 +141,6 @@ public class RecordServiceController {
         String currentLine;
         try {
             // get ports
-
             getRecordServerPorts();
             if(!task.equalsIgnoreCase("extract")) {
                 rsEnvFile = new File("conf/rs-MW-Envs.txt");
@@ -123,8 +149,7 @@ public class RecordServiceController {
                 rsHostBuilder = new StringBuilder();
                 while ((currentLine = br.readLine()) != null) {
                     rsHostBuilder.append(currentLine).append("\n");
-
-                }
+             }
             }else {
                 rsEnvFile = new File("conf/rs-data-staging-Envs.txt");
                 httpServletResponse.setContentType("text/plain");
@@ -132,12 +157,11 @@ public class RecordServiceController {
                 rsHostBuilder = new StringBuilder();
                 while ((currentLine = br.readLine()) != null) {
                     rsHostBuilder.append(currentLine).append("\n");
-
                 }
             }
         } catch (Exception e) {
-            logger.info("rs Config File Not Found: " + e.getMessage());
-            throw  new FileNotFoundException("rs Config File Not Found: " + e.getMessage());
+            logger.info("Record Service Hosts Config File Not Found: " + e.getMessage());
+            throw  new FileNotFoundException("Record Service Hosts Config File Not Found: " + e.getMessage());
         }finally {
             if(br!=null)
                 br.close();
@@ -156,9 +180,9 @@ public class RecordServiceController {
             fileInputStream =new FileInputStream(rsHostPortsFile);
             rsHostPorts.load(fileInputStream);
         } catch (Exception e) {
-            logger.info("Environment Config File Not Found: " + e.getMessage());
+            logger.info("Record Server Host Ports Config File Not Found: " + e.getMessage());
             rsHostPorts=null;
-            throw  new MessageProducerException("recordServerHostPorts File Not Found: " + e.getMessage());
+            throw  new MessageProducerException("Record Server Host Ports Config File Not Found: " + e.getMessage());
         }finally {
             if(fileInputStream!=null)
                 fileInputStream.close();

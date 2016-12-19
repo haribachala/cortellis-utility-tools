@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Seda Alerts</title>
+    <title>Cortellis Utility Tool</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="css/jquery-ui.css">
     <link rel='stylesheet' href='css/mainPage.css' type='text/css' />
@@ -108,18 +108,32 @@
                        $('#rsPasswordDiv').hide();
                   }
         }
+    function callComponent(){
+       var cName= document.getElementById("appName").value;
+
+       if(cName == "--"){
+
+       }else if(cName == "sedaAlerts"){
+           window.location="./sedaAlerts.html";
+       }else if( cName == "recordServices"){
+             window.location="./recordService.html";
+       }else{
+           alert("please select appropritate component");
+       }
+
+    }
 
     </script>
  </head>
 <body>
-<div id="div-cortellis-utility-tool-form">
+<div id="div-cortellis-utility-tool-form" onchange="callComponent();">
     <div class="form-sub-title" align="center">Cortellis Utility Tool</div>
-    <form name="cortellis-utility-tool-form" >
+    <form name="cortellis-utility-tool-form" method="post">
         <table align="center"  border="0">
             <tr>
                 <td nowrap="true">
                     <label>Application: </label>&nbsp;</td><td><div class="input-container" id="appNameDiv">
-                <select name="appName" id="appName" onchange="showHideFormDivs();">
+                <select name="appName" id="appName">
                         <option value="--">--</option>
                         <option value="sedaAlerts">cortellis-seda-alerts</option>
                         <option value="recordServices">record-services</option>

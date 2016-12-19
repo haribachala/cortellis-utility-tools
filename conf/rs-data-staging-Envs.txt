@@ -3,5 +3,5 @@
 <option value="staging-tools-srv-build-dtc-1.int.thomsonreuters.com">Build-DTC-DST</option>
 <option value="staging-tools-srv-qa-eagan-1.int.thomsonreuters.com">QA-EAGAN-DST</option>
 <option value="staging-tools-srv-perf-eagan-1.int.thomsonreuters.com">Perf-EAGAN-DST</option>
-<option value="staging-tools-srv-{{env}}.int.thomsonreuters.com">Prod-EDC-DST</option>
-<option value="staging-tools-srv-{{env}}.int.thomsonreuters.com">Prod-EAGAN-DST</option>
+<option value="staging-tools-srv-prod-edc-1.int.thomsonreuters.com">Prod-EDC-DST</option>
+<option value="staging-tools-srv-prod-eagan-1.int.thomsonreuters.com">Prod-EAGAN-DST</option>

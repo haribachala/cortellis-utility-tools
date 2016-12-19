@@ -4,7 +4,7 @@ body,h1,h2,h3,p,td,quote,small,form,input,ul,li,ol,label{
 }
 
 body{
-	margin-top:40px;
+	margin-top:60px;
 	font-family:Arial, Helvetica, sans-serif;
 	color:#51555C;
 	height:100%;
@@ -67,7 +67,7 @@ td{
 
 	margin:10px auto 40px auto;
 	width: 450px;
-	height: 200px;
+	height: 250px;
 	position:relative;
 }
 #div-cortellis-utility-tool-form,.registered{
@@ -134,18 +134,17 @@ td{
 	visibility:hidden;
 }
 /* Tooltip container */
-.tooltip {
+.mouseHover {
     position: relative;
     display: inline-block;
     font-size:12px;
-    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
-}
+ }
 
 /* Tooltip text */
-.tooltip .tooltiptext {
+.mouseHover .tooltiptext {
     font-size:12px;
-   visibility: hidden;
-    width: 220px;
+    visibility: hidden;
+    width: 240px;
     background-color: black;
     color: #fff;
     text-align: center;
@@ -158,7 +157,21 @@ td{
 }
 
 /* Show the tooltip text when you mouse over the tooltip container */
-.tooltip:hover .tooltiptext {
+.mouseHover:hover .tooltiptext {
     visibility: visible;
 }
+.right {
+    text-align: right;
+    float: right;
+    }
+    .left {
+    text-align: left;
+    float: left;
+    }
 
+#divSuccess:empty {
+    display: none;
+}
+#divError:empty {
+    display: none;
+}

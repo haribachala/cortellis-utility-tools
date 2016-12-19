@@ -5,7 +5,7 @@
 <option value="middleware-b-srv-qa-eagan-2.int.thomsonreuters.com">QA-EAGAN-MW-B-2</option>
 <option value="middleware-b-srv-perf-eagan-1.int.thomsonreuters.com">Perf-EAGAN-MW-B-1</option>
 <option value="middleware-b-srv-perf-eagan-2.int.thomsonreuters.com">Perf-EAGAN-MW-B-2</option>
-<option value="middleware-b-srv-{{env}}.int.thomsonreuters.com">Prod-EDC-MW-B-1</option>
-<option value="middleware-b-srv-{{env}}.int.thomsonreuters.com">Prod-EDC-MW-B-2</option>
-<option value="middleware-b-srv-{{env}}.int.thomsonreuters.com">Prod-EAGAN-MW-B-1</option>
-<option value="middleware-b-srv-{{env}}.int.thomsonreuters.com">Prod-EAGAN-MW-B-2</option>
+<option value="middleware-b-srv-prod-edc-1.int.thomsonreuters.com">Prod-EDC-MW-B-1</option>
+<option value="middleware-b-srv-prod-edc-2.int.thomsonreuters.com">Prod-EDC-MW-B-2</option>
+<option value="middleware-b-srv-prod-eagan-1.int.thomsonreuters.com">Prod-EAGAN-MW-B-1</option>
+<option value="middleware-b-srv-prod-eagan-2.int.thomsonreuters.com">Prod-EAGAN-MW-B-2</option>

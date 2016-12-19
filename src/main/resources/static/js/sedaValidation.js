@@ -60,6 +60,7 @@ if(env == "" || env ==null){
       }
 
     }
+    return true;
   }
 
  function validate(input) {

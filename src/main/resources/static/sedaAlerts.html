@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Seda Alerts Utility</title>
+    <link rel="stylesheet" href="css/jquery-ui.css">
+    <link rel='stylesheet' href='css/mainPage.css' type='text/css' />
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/sedaValidation.js"></script>
+    <script src="js/jquery-ui.js"></script>
+    <script type="text/javascript">
+         function hideSedaPassword() {
+            $('#sedaPasswordDiv').hide();
+          };
+       $(document).ready(function(){
+            $("#env").load("http://localhost:9080/getAlertSedaEnvironments", function(responseTxt, statusTxt, xhr){
+              if(statusTxt == "success")
+                  showHideSedaPasswordTxtBox();
+                // console.log(responseTxt);
+              if(statusTxt == "error")
+                alert("Error while loading environments: " + xhr.status + ": " + xhr.statusText);
+                showHideSedaPasswordTxtBox();
+             });
+
+         });
+          $( function() {
+            $( "#logicalDate" ).datepicker(
+            {
+                dateFormat: 'yy-mm-dd',
+                maxDate: -1
+             });
+
+        } );
+        function showHideSedaPasswordTxtBox(){
+          var selectedEnv = $('#env option:selected').val();
+                   if(selectedEnv =='prod-edc' || selectedEnv =='prod-eagan') {
+                    $('#sedaPasswordDiv').show();
+                  }else{
+                       $('#sedaPasswordDiv').hide();
+                  }
+        }
+        $(document).ready(function(){
+         $("#submitSedaForm").click(function(e) {
+          $( "#divSuccess" ).empty();
+          $( "#divError" ).empty();
+            e.preventDefault();
+         if( validateSedaAlertsForm()){
+           e.preventDefault();
+           var url = "http://localhost:9080/sendAlerts";
+         $.ajax({
+           type: "GET",
+           url: url,
+           cache: false,
+           data: $("#sedaAlertsForm").serialize(),
+           success: function(data,textStatus,jqXHR )
+           {
+             if (data != null && (jqXHR.status == 200)) {
+                    $("#divSuccess").html(jqXHR.responseText);
+                 } else {
+                    $("#divError").html(jqXHR.responseText);
+                 }
+
+           },
+           error: function (xhr, ajaxOptions, thrownError) {
+              $("#divError").html(xhr.responseText);
+           }
+        });
+        e.preventDefault();
+        }
+});
+});
+$(document).ready(function(){
+   $("#clearSedaForm").click(function(e) {
+   $( "#divSuccess" ).empty();
+   $( "#divError" ).empty();
+   $( "#chkAllAlerts" ).prop( "disabled", false );
+   $( "#alertIds" ).prop( "disabled", false );
+ });
+});
+</script>
+</head>
+<body>
+<div id="parentDiv" align="center">
+<div class="alert alert-danger" align="center" id="divError" ></div>
+<div id="div-sedaAlertsForm">
+    <div class="form-sub-title" align="center">Cortellis Seda Alerts Utility
+        <a href="http://localhost:9080/" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    </div>
+    <form name="sedaAlertsForm" id="sedaAlertsForm" action="#">
+        <table align="center"  border="0">
+            <tr>
+                <td nowrap="true">
+                    <label>Environment: </label>&nbsp;</td><td><div class="input-container" id="envDiv">
+               <div class="mouseHover">
+                <select name="env" id="env" onchange="showHideSedaPasswordTxtBox();" required>
+                    <!-- <option value="local">Local-Machine</option>
+                        <option value="dev-dtc">Dev-DTC</option>
+                        <option value="build-dtc">Build-DTC</option>
+                        <option value="qa-eagan">QA-EAGAN</option>
+                        <option value="prod-edc">Prod-EDC</option>
+                        <option value="prod-eagan">Prod-EAGAN</option>-->
+                </select><span class="tooltiptext">Please select appropriate Environment from list.</span>
+               </div></div>
+            </td>
+            </tr>
+
+
+            <tr>
+                <td nowrap="true"><label for="logicalDate">Logical Date:</label>&nbsp;</td>
+                <td><div class="input-container"><div class="mouseHover"><input type="text" id="logicalDate" name="logicalDate" readonly="true" style="width:85px;" placeholder="YYYY-DD-MM"><span class="tooltiptext">Alerts will be process for this Date</span></div></div></td>
+            </tr>
+            <tr>
+                <td><label>Alert Id(s):</label></td>
+                <td>
+                    <textarea rows="4" cols="50" name="alertIds" id="alertIds"  placeholder="Please separate Alert ID(s) using a comma (,) "  onkeyup="javascript:disableAllUsersCheckBox();"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td><div class="input-container">
+                <td nowrap="true"><div class="mouseHover"><input type="checkbox" name="chkAllAlerts" id="chkAllAlerts" onclick="javascript:disableAlertIdsTextArea();">&nbsp;&nbsp;All users(internal+external)<span class="tooltiptext">Alerts will be processed to all subscribers.</span></div></td></div>
+            </tr>
+
+            <tr id="sedaPasswordDiv">
+                <td nowrap="true"><label for="sedaPassword">Password :</label>&nbsp;</td>
+                <td><div class="input-container"><div class="mouseHover"><input type="password" id="sedaPassword" name="password"  style="width:85px;"><span class="tooltiptext">Please enter password to trigger alerts on Prod Env.</span></div></div></td>
+            </tr>
+
+        </table>
+        <div style="text-align:center">
+            <input class="greenButton" type="submit" id="submitSedaForm" name="submitSedaForm"  value="Submit" />
+            <input class="greenButton" type="reset" id="clearSedaForm" name="clearSedaForm" value="Clear"/>
+        </div>
+    </form>
+
+</div>
+
+<div class="alert alert-info fade in" align="center" id="divSuccess"></div>
+</div>
+</body>
+</html>

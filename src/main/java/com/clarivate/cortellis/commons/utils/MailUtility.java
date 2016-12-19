@@ -15,12 +15,12 @@ public class MailUtility {
 
     private JavaMailSenderImpl javaMailSender;
 
-    public void sendMail(String from, String to, String subject, String msg) {
+    public void sendMail(String from, String to, String cc, String subject, String msg) {
 
         javaMailSender =new JavaMailSenderImpl();
         javaMailSender.setHost("smtp.gmail.com");
-        javaMailSender.setUsername("haribachala@gmail.com");
-        javaMailSender.setPassword("Lilly@2016");
+        javaMailSender.setUsername("cortellis.utility.tool@gmail.com");
+        javaMailSender.setPassword("cortellis");
         javaMailSender.getJavaMailProperties().setProperty("mail.smtp.auth", "true");
         javaMailSender.getJavaMailProperties().setProperty("mail.smtp.socketFactory.port", "465");
         javaMailSender.getJavaMailProperties().setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
@@ -29,6 +29,7 @@ public class MailUtility {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(from);
         message.setTo(to);
+        message.setCc(cc);
         message.setSubject(subject);
         message.setText(msg);
         //sending message

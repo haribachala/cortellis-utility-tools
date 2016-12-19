@@ -2,5 +2,6 @@
 <option value="dev-dtc">Dev-DTC</option>
 <option value="build-dtc">Build-DTC</option>
 <option value="qa-eagan">QA-EAGAN</option>
+<option value="perf-eagan">Perf-EAGAN</option>
 <option value="prod-edc">Prod-EDC</option>
 <option value="prod-eagan">Prod-EAGAN</option>

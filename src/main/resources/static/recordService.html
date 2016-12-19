@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="css/jquery-ui.css">
+    <link rel='stylesheet' href='css/mainPage.css' type='text/css' />
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/rsValidation.js"></script>
+    <title>Record Service Utility</title>
+    <script type="text/javascript">
+         function loadRSEnvironments() {
+            var  task= document.getElementById("task").value;
+            $("#recordServiceEnv").load("http://localhost:9080/getRSEnvironments", {task: task}, function(responseTxt, statusTxt, xhr){
+              if(statusTxt == "success"){
+                 showHidePasswordRSTxtBox();
+                 showHideSnapShotTxt();
+                 console.log(responseTxt);
+             }else if(statusTxt == "error"){
+                alert("Error while loading RSEnvironments: " + xhr.status + ": " + xhr.statusText);
+                 showHidePasswordRSTxtBox();
+                 showHideSnapShotTxt();
+                 }
+             });
+
+         }
+          function showHideSnapShotTxt(){
+            var  task=  document.getElementById("task").value;
+            if(task == 'health' || task == 'extract' || task == '--'){
+                $("#snapshotDiv").hide();
+             }else{
+                $("#snapshotDiv").show();
+             }
+    }
+     function showHidePasswordRSTxtBox(){
+          var selectedEnv = $('#recordServiceEnv option:selected').text();
+          // alert("show pass" +selectedEnv.startsWith('Prod'));
+                   if(selectedEnv.startsWith('Prod')) {
+                    $('#rsPasswordDiv').show();
+                  }else{
+                       $('#rsPasswordDiv').hide();
+                  }
+        }
+         $(document).ready(function(){
+         $("#submitRecordServicesForm").click(function(e) {
+           $( "#divSuccess" ).empty();
+           $( "#divError" ).empty();
+            e.preventDefault();
+         if( validateRecordServicesForm()){
+           e.preventDefault();
+           var  task = document.forms["recordServicesForm"]["task"].value;
+           var url = "http://localhost:9080/recordServiceAction";
+         $.ajax({
+           type: "POST",
+           url: url,
+           cache: false,
+           data: $("#recordServicesForm").serialize(),
+           success: function(data,textStatus,jqXHR )
+           {
+             if (data != null && (jqXHR.status == 200)) {
+                  if(task == 'health'){
+                       formatHealthResponse(jqXHR.responseText);
+                   }else{
+                       $("#divSuccess").html(jqXHR.responseText);
+                    }
+                 } else {
+                    $("#divError").html(jqXHR.responseText);
+                 }
+
+           },
+           error: function (xhr, ajaxOptions, thrownError) {
+              $("#divError").html(xhr.responseText);
+           }
+
+         });
+
+        e.preventDefault(); // avoid to execute the actual submit of the form.
+        }
+});
+});
+$(document).ready(function(){
+   $("#clearRecordServicesForm").click(function(e) {
+   $( "#divSuccess" ).empty();
+   $( "#divError" ).empty();
+ });
+});
+// TODO - This function should be simplified.
+function formatHealthResponse(responseText){
+
+    var  response= responseText.split('#');;
+    var health = new Array();
+    health.push([ "content Status", response[0]]);
+    health.push([ "Storage Type", response[1]]);
+    health.push([ "Cassandra Status", response[2]]);
+    health.push([ "Latest Snapshot", response[3]]);
+    health.push([ "Loaded Snapshots", response[4]]);
+    health.push([ "Record Count", response[5]]);
+    health.push([ "ActiveMq Status", response[6]]);
+
+    //Create a HTML Table element.
+    var table = document.createElement("TABLE");
+    table.border = "1";
+
+    //Get the count of columns.
+    var columnCount = health[0].length;
+
+    //Add the data rows.
+    for (var i = 0; i < health.length; i++) {
+        row = table.insertRow(-1);
+        for (var j = 0; j < columnCount; j++) {
+            var cell = row.insertCell(-1);
+            cell.setAttribute("nowrap",true);
+            cell.innerHTML = health[i][j];
+        }
+    }
+
+   // var dvTable = document.getElementById("dvTable");
+   // dvTable.innerHTML = "";
+   // dvTable.appendChild(table);
+         $("#divSuccess").html(table);
+  }
+    </script>
+</head>
+<body>
+<div class="alert alert-danger" align="center" id="divError" style="margin:0 auto;"></div>
+
+<div id="div-RecordServicesForm">
+    <div class="form-sub-title" align="center">Cortellis Record Services utility Tool
+        <a href="http://localhost:9080/" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    </div>
+    <form name="recordServicesForm" id="recordServicesForm" action="#">
+
+        <table align="center"  border="0">
+            <tr>
+                <td nowrap="true"><label>component: </label>&nbsp;</td>
+                <td nowrap="true"><div class="input-container" id="componentDiv"><div class="mouseHover">
+                    <select name="componentName" id="componentName" required autocomplete="on">
+                        <option value="Drugv1">Drug</option>
+                        <option value="Trialv1">Trial</option>
+                        <option value="Companyv1">Company</option>
+                        <option value="PatentFamilyv1">Patent Family</option>
+                    </select><span class="tooltiptext">Please select appropriate Component.</span>
+                </div></div>
+                </td>
+            </tr>
+            <tr>
+                <td nowrap="true"><label>Task: </label>&nbsp;</td>
+                <td nowrap="true"><div class="mouseHover">
+                    <select name="task" id="task"  onchange="showHideSnapShotTxt();loadRSEnvironments();" required  autocomplete="on">
+                        <option value="">--</option>
+                        <option value="extract">Extract</option>
+                        <option value="load">Load</option>
+                        <option value="publish">Publish</option>
+                        <option value="health">Health</option>
+                    </select><span class="tooltiptext">Please select appropriate Task from list.</span></div>
+                </td>
+            </tr>
+            <tr>
+                <td nowrap="true">
+                    <label>Environment: </label>&nbsp;</td><td><div class="input-container" id="env-container-rs"><div class="mouseHover">
+                <select name="recordServiceEnv" id="recordServiceEnv" onchange="showHidePasswordRSTxtBox();"  autocomplete="on">
+                    <!--  <option value="local">Local-Machine</option>
+                          <option value="c427nvzdnganp.int.thomsonreuters.com">Dev-DTC-MW-B-1</option>
+                           <option value="c343ravdnganp.int.thomsonreuters.com">Build-DTC-MW-B-1</option>
+                           <option value="c898hhwenganp.int.thomsonreuters.com">QA-EAGAN-MW-B-1</option>
+                           <option value="c514jgnenganp.int.thomsonreuters.com">QA-EAGAN-MW-B-2</option>
+                           <option value="c475rxkenganp.int.thomsonreuters.com">Perf-EAGAN-MW-B-1</option>
+                           <option value="c484bpxenganp.int.thomsonreuters.com">Perf-EAGAN-MW-B-2</option>
+                           <option value="c624mkrlngapr.int.thomsonreuters.com">Prod-EDC-MW-B-1</option>
+                           <option value="c447tdxlngapr.int.thomsonreuters.com">Prod-EDC-MW-B-2</option>
+                           <option value="c129uwfengapr.int.thomsonreuters.com">Prod-EAGAN-MW-B-1</option>
+                           <option value="c019cjqengapr.int.thomsonreuters.com">Prod-EAGAN-MW-B-2</option>-->
+                </select><span class="tooltiptext">Please select appropriate Host Name.</span></div></div>
+            </td>
+            </tr>
+            <tr id="snapshotDiv">
+                <td nowrap="true"><label for="snapshotTime">snapshot Time:</label>&nbsp;</td>
+                <td><div class="input-container"><div class="mouseHover"><input type="text" id="snapshotTime" name="snapshotTime"  style="width:160px;" placeholder="YYYY-MM-DDTHH:MM:SSZ"   max="24"  min="22" autocomplete="on"><span class="tooltiptext">Please enter proper snapshot time.</span></div></div></td>
+            </tr>
+            <tr id="rsPasswordDiv">
+                <td nowrap="true"><label for="rsPassword">Password :</label>&nbsp;</td>
+                <td><div class="input-container"><div class="mouseHover"><input type="password" id="rsPassword" name="rsPassword"  style="width:85px;"><span class="tooltiptext">Please enter password to proceed with Prod Env.</span></div></div></td>
+            </tr>
+        </table>
+        <div style="text-align:center">
+            <input class="greenButton" type="submit" id="submitRecordServicesForm" name="submitRecordServicesForm" value="Submit" />
+            <input class="greenButton" type="reset" id="clearRecordServicesForm" value="Clear" />
+        </div>
+
+       </form>
+
+</div>
+<div class="alert alert-info fade in" align="center" id="divSuccess" style="margin:0 auto;"></div>
+</body>
+</html>
