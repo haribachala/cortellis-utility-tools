@@ -1,0 +1,21 @@
+###########################################################
+#   Spring boot Configuration                               #
+###########################################################
+spring:
+  application:
+    name: cortellis-utility-tools
+###########################################################
+#   server Configuration                              #
+###########################################################
+server:
+  port: 9080
+
+###########################################################
+#   logging Configuration                               #
+###########################################################
+
+logging:
+  level:
+       org.springframework: INFO
+       com.clarivate: INFO
+  file: cortellis-utility-tools.log

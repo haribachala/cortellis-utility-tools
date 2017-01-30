@@ -11,9 +11,12 @@
     <script type="text/javascript" src="js/rsValidation.js"></script>
     <title>Record Service Utility</title>
     <script type="text/javascript">
+      var protocol = "http://";
+      var hostName =  window.location.host;
          function loadRSEnvironments() {
             var  task= document.getElementById("task").value;
-            $("#recordServiceEnv").load("http://localhost:9080/getRSEnvironments", {task: task}, function(responseTxt, statusTxt, xhr){
+            var  rsEnvURL = protocol.concat(hostName).concat("/getRSEnvironments");
+            $("#recordServiceEnv").load(rsEnvURL, {task: task}, function(responseTxt, statusTxt, xhr){
               if(statusTxt == "success"){
                  showHidePasswordRSTxtBox();
                  showHideSnapShotTxt();
@@ -51,10 +54,10 @@
          if( validateRecordServicesForm()){
            e.preventDefault();
            var  task = document.forms["recordServicesForm"]["task"].value;
-           var url = "http://localhost:9080/recordServiceAction";
+           var appURL =protocol.concat(hostName).concat("/recordServiceAction");
          $.ajax({
            type: "POST",
-           url: url,
+           url: appURL,
            cache: false,
            data: $("#recordServicesForm").serialize(),
            success: function(data,textStatus,jqXHR )
@@ -121,6 +124,9 @@ function formatHealthResponse(responseText){
    // dvTable.appendChild(table);
          $("#divSuccess").html(table);
   }
+   function redirectToHomepage() {
+    document.getElementById("close").href= protocol.concat(hostName);
+  };
     </script>
 </head>
 <body>
@@ -128,7 +134,7 @@ function formatHealthResponse(responseText){
 
 <div id="div-RecordServicesForm">
     <div class="form-sub-title" align="center">Cortellis Record Services utility Tool
-        <a href="http://localhost:9080/" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <a href="#" id="close" class="close" data-dismiss="alert" aria-label="close" onclick="redirectToHomepage();">&times;</a>
     </div>
     <form name="recordServicesForm" id="recordServicesForm" action="#">
 

@@ -11,11 +11,14 @@
     <script type="text/javascript" src="js/sedaValidation.js"></script>
     <script src="js/jquery-ui.js"></script>
     <script type="text/javascript">
+      var protocol = "http://";
+      var hostName =  window.location.host;
          function hideSedaPassword() {
             $('#sedaPasswordDiv').hide();
           };
        $(document).ready(function(){
-            $("#env").load("http://localhost:9080/getAlertSedaEnvironments", function(responseTxt, statusTxt, xhr){
+            var sedaEnvURL = protocol.concat(hostName).concat("/getAlertSedaEnvironments");
+            $("#env").load(sedaEnvURL, function(responseTxt, statusTxt, xhr){
               if(statusTxt == "success")
                   showHideSedaPasswordTxtBox();
                 // console.log(responseTxt);
@@ -48,10 +51,10 @@
             e.preventDefault();
          if( validateSedaAlertsForm()){
            e.preventDefault();
-           var url = "http://localhost:9080/sendAlerts";
+           var appURL = protocol.concat(hostName).concat("/sendAlerts");
          $.ajax({
            type: "GET",
-           url: url,
+           url: appURL,
            cache: false,
            data: $("#sedaAlertsForm").serialize(),
            success: function(data,textStatus,jqXHR )
@@ -79,6 +82,9 @@ $(document).ready(function(){
    $( "#alertIds" ).prop( "disabled", false );
  });
 });
+  function redirectToHomepage() {
+    document.getElementById("close").href= protocol.concat(hostName);
+  };
 </script>
 </head>
 <body>
@@ -86,7 +92,7 @@ $(document).ready(function(){
 <div class="alert alert-danger" align="center" id="divError" ></div>
 <div id="div-sedaAlertsForm">
     <div class="form-sub-title" align="center">Cortellis Seda Alerts Utility
-        <a href="http://localhost:9080/" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <a href="#" id="close" class="close" data-dismiss="alert" aria-label="close" onclick="redirectToHomepage();">&times;</a>
     </div>
     <form name="sedaAlertsForm" id="sedaAlertsForm" action="#">
         <table align="center"  border="0">
