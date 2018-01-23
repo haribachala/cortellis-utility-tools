@@ -49,7 +49,7 @@ td{
 	border:3px solid #eeeeee;
 	padding:10px;
 
-	background:url(img/bg.jpg) repeat-x #cbd4e4;
+	background:url(images/bg.jpg) repeat-x #cbd4e4;
 	color:#203360;
 
 	margin:30px auto 40px auto;
@@ -62,7 +62,7 @@ td{
 	border:3px solid #eeeeee;
 	padding:10px;
 
-	background:url(img/bg.jpg) repeat-x #cbd4e4;
+	background:url(images/bg.jpg) repeat-x #cbd4e4;
 	color:#203360;
 
 	margin:10px auto 40px auto;
@@ -74,7 +74,7 @@ td{
 	border:3px solid #eeeeee;
 	padding:10px;
 
-	background:url(img/bg.jpg) repeat-x #cbd4e4;
+	background:url(images/bg.jpg) repeat-x #cbd4e4;
 	color:#203360;
 
 	margin:30px auto 40px auto;
@@ -103,6 +103,16 @@ td{
 	padding:3px 4px 3px 4px;
 	color:white;
 	background-color:#589d39;
+	outline:none;
+	border:1px solid #006600;
+	font-weight:bold;
+}
+.disableButton{
+	width:auto;
+	margin:10px 0 0 2px;
+	padding:3px 4px 3px 4px;
+	color:#666666;
+	background-color:#cccccc;
 	outline:none;
 	border:1px solid #006600;
 	font-weight:bold;

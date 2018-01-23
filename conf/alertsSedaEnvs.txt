@@ -1,7 +1,6 @@
 <option value="local">Local-Machine</option>
-<option value="dev-dtc">Dev-DTC</option>
-<option value="build-dtc">Build-DTC</option>
-<option value="qa-eagan">QA-EAGAN</option>
-<option value="perf-eagan">Perf-EAGAN</option>
-<option value="prod-edc">Prod-EDC</option>
-<option value="prod-eagan">Prod-EAGAN</option>
+<option value="snapshot">Snapshot</option>
+<option value="stable">Stable</option>
+<option value="perf">Perf</option>
+<option value="prod-eu">Prod-EU</option>
+<option value="prod-us">Prod-US</option>

@@ -1,7 +1,6 @@
 <option value="localhost">Local-Machine</option>
-<option value="staging-tools-srv-dev-dtc-1.int.thomsonreuters.com">Dev-DTC-DST</option>
-<option value="staging-tools-srv-build-dtc-1.int.thomsonreuters.com">Build-DTC-DST</option>
-<option value="staging-tools-srv-qa-eagan-1.int.thomsonreuters.com">QA-EAGAN-DST</option>
-<option value="staging-tools-srv-perf-eagan-1.int.thomsonreuters.com">Perf-EAGAN-DST</option>
-<option value="staging-tools-srv-prod-edc-1.int.thomsonreuters.com">Prod-EDC-DST</option>
-<option value="staging-tools-srv-prod-eagan-1.int.thomsonreuters.com">Prod-EAGAN-DST</option>
+<option value="dstools-1.eu-west-1.snapshot.dev.cortellis.int.clarivate.com">Snapshot-DST</option>
+<option value="dstools-1.us-west-2.stable.dev.cortellis.int.clarivate.com">Stable-DST</option>
+<option value="dstools-1.eu-west-1.perf.dev.cortellis.int.clarivate.com">Perf-DST</option>
+<option value="dstools-1.eu-west-1.prodeu.prod.cortellis.int.clarivate.com">Prod-EU-DST</option>
+<option value="dstools-1.us-west-2.produs.prod.cortellis.int.clarivate.com">Prod-US-DST</option>

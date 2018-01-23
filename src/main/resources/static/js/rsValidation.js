@@ -34,7 +34,7 @@ function validateRecordServicesForm() {
              document.forms["recordServicesForm"]["rsPassword"].focus();
               return false;
            }else if(rsPassword.length > 0 ){
-              if(rsPassword != "web"){
+              if(rsPassword != "manual"){
                alert("password not matched !")
                document.forms["recordServicesForm"]["rsPassword"].focus();
                return false;

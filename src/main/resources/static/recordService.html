@@ -38,9 +38,9 @@
              }
     }
      function showHidePasswordRSTxtBox(){
-          var selectedEnv = $('#recordServiceEnv option:selected').text();
-          // alert("show pass" +selectedEnv.startsWith('Prod'));
-                   if(selectedEnv.startsWith('Prod')) {
+          var selectedEnv = $('#recordServiceEnv option:selected').text().toLowerCase();
+          // alert("show pass" +selectedEnv.startsWith('prod'));
+                  if(selectedEnv.startsWith('prod')) {
                     $('#rsPasswordDiv').show();
                   }else{
                        $('#rsPasswordDiv').hide();
@@ -53,6 +53,8 @@
             e.preventDefault();
          if( validateRecordServicesForm()){
            e.preventDefault();
+           $("#submitRecordServicesForm").attr("disabled", true);
+           $("#submitRecordServicesForm").css("background", "grey");
            var  task = document.forms["recordServicesForm"]["task"].value;
            var appURL =protocol.concat(hostName).concat("/recordServiceAction");
          $.ajax({
@@ -87,6 +89,8 @@ $(document).ready(function(){
    $("#clearRecordServicesForm").click(function(e) {
    $( "#divSuccess" ).empty();
    $( "#divError" ).empty();
+   $("#submitRecordServicesForm").attr("disabled", false);
+   $("#submitRecordServicesForm").css("background-color", "#589d39");
  });
 });
 // TODO - This function should be simplified.
@@ -127,6 +131,9 @@ function formatHealthResponse(responseText){
    function redirectToHomepage() {
     document.getElementById("close").href= protocol.concat(hostName);
   };
+
+
+
     </script>
 </head>
 <body>

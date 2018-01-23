@@ -37,8 +37,10 @@
 
         } );
         function showHideSedaPasswordTxtBox(){
-          var selectedEnv = $('#env option:selected').val();
-                   if(selectedEnv =='prod-edc' || selectedEnv =='prod-eagan') {
+          var selectedEnv = $('#env option:selected').val().toLowerCase();
+          // alert("selectedEnv:" +selectedEnv);
+          // alert("show pass" +selectedEnv.startsWith('prod'));
+                  if(selectedEnv.startsWith('prod')) {
                     $('#sedaPasswordDiv').show();
                   }else{
                        $('#sedaPasswordDiv').hide();
@@ -51,6 +53,8 @@
             e.preventDefault();
          if( validateSedaAlertsForm()){
            e.preventDefault();
+           $("#submitSedaForm").attr("disabled", true);
+           $("#submitSedaForm").css("background", "grey");
            var appURL = protocol.concat(hostName).concat("/sendAlerts");
          $.ajax({
            type: "GET",
@@ -80,6 +84,8 @@ $(document).ready(function(){
    $( "#divError" ).empty();
    $( "#chkAllAlerts" ).prop( "disabled", false );
    $( "#alertIds" ).prop( "disabled", false );
+   $("#submitSedaForm").attr("disabled", false);
+   $("#submitSedaForm").css("background-color", "#589d39");
  });
 });
   function redirectToHomepage() {

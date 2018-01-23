@@ -34,7 +34,7 @@ dependencies {
     compile group: 'org.springframework.integration', name: 'spring-integration-mail', version: '4.3.0.RELEASE'
     compile 'org.springframework:spring-webmvc:4.1.6.RELEASE'
     compile group: 'javax.mail', name: 'com.springsource.javax.mail', version: '1.4.5'
-    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+   // compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     compile("org.springframework.boot:spring-boot-starter-web:1.4.2.RELEASE")
     compile("org.springframework.boot:spring-boot-starter-jetty:1.4.2.RELEASE")
     compile group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.9'

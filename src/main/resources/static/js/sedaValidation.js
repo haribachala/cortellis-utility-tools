@@ -12,13 +12,13 @@ if(env == "" || env ==null){
     document.forms["sedaAlertsForm"]["env"].focus();
     return false;
 }
- if( env == 'prod-edc' || env =='prod-eagan'){
+ if( env.indexOf('prod')>=0 ){
          if(sedaPassword.length == "" ){
              alert("password required to trigger alert's on production environment");
              document.forms["sedaAlertsForm"]["sedaPassword"].focus();
             return false;
          }else if(sedaPassword.length > 0 ){
-            if(sedaPassword != "web"){
+            if(sedaPassword != "manual"){
              alert("password not matched !")
              document.forms["sedaAlertsForm"]["sedaPassword"].focus();
              return false;

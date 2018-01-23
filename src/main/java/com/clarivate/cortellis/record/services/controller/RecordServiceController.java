@@ -52,7 +52,7 @@ public class RecordServiceController {
             SystemHostName systemHostName = new SystemHostName();
            if (recordServiceEnv.contains("prod")) {
                 MailUtility mailUtility = new MailUtility();
-                mailUtility.sendMail("cortellis.utility.tool@gmail.com", "hariprasad.bachala@tr.com","cortellis.utility.tool@gmail.com",  task.toUpperCase()+ " task triggered manually on " + recordServiceEnv + "", task+ " task Processed by :" + systemHostName.getHostName() + "  User :" + System.getProperty("user.name"));
+                mailUtility.sendMail("cortellis.utility.tool@gmail.com", "hariprasad.bachala@clarivate.com","cortellis.utility.tool@gmail.com",  task.toUpperCase()+ " task triggered manually on " + recordServiceEnv + "", task+ " task Processed by :" + systemHostName.getHostName() + "  User :" + System.getProperty("user.name"));
            }
             logger.info("Record Service" +task.toUpperCase()+  " Process by :" + systemHostName.getHostName() + "  User :" + System.getProperty("user.name"));
             recordServiceConstants = new RecordServiceConstants();
